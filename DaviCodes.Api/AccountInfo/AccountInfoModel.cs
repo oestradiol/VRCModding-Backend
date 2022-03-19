@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using DaviCodes.Api.DisplayName;
-using DaviCodes.Api.User;
 
 namespace DaviCodes.Api.AccountInfo;
 

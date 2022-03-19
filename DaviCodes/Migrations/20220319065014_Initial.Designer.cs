@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DaviCodes.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220317070039_Initial")]
+    [Migration("20220319065014_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace DaviCodes.Migrations
                 .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("DaviCodes.Entities.AccountInfo", b =>
+            modelBuilder.Entity("DaviCodes.Entities.Account", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(40)
@@ -31,8 +31,11 @@ namespace DaviCodes.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("UserFK")
-                        .HasColumnType("varchar(255)");
+                    b.Property<DateTime>("LastLogin")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("UserFK")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -41,7 +44,7 @@ namespace DaviCodes.Migrations
 
                     b.HasIndex("UserFK");
 
-                    b.ToTable("AccountInfos");
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("DaviCodes.Entities.DisplayName", b =>
@@ -63,8 +66,8 @@ namespace DaviCodes.Migrations
                     b.Property<DateTime>("LastLogin")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("UserFK")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("UserFK")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -82,8 +85,8 @@ namespace DaviCodes.Migrations
                     b.Property<DateTime>("LastLogin")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("UserFK")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("UserFK")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -94,7 +97,7 @@ namespace DaviCodes.Migrations
 
             modelBuilder.Entity("DaviCodes.Entities.UsedDisplayName", b =>
                 {
-                    b.Property<string>("AccountInfoFK")
+                    b.Property<string>("AccountFK")
                         .HasColumnType("varchar(40)");
 
                     b.Property<string>("DisplayNameFK")
@@ -106,7 +109,7 @@ namespace DaviCodes.Migrations
                     b.Property<DateTime>("LastUsage")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("AccountInfoFK", "DisplayNameFK");
+                    b.HasKey("AccountFK", "DisplayNameFK");
 
                     b.HasIndex("DisplayNameFK");
 
@@ -115,8 +118,9 @@ namespace DaviCodes.Migrations
 
             modelBuilder.Entity("DaviCodes.Entities.User", b =>
                 {
-                    b.Property<string>("Name")
-                        .HasColumnType("varchar(255)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreationDateUtc")
                         .HasColumnType("datetime(6)");
@@ -124,22 +128,27 @@ namespace DaviCodes.Migrations
                     b.Property<DateTime>("LastLogin")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("DaviCodes.Entities.AccountInfo", b =>
+            modelBuilder.Entity("DaviCodes.Entities.Account", b =>
                 {
                     b.HasOne("DaviCodes.Entities.DisplayName", "CurrentDisplayName")
                         .WithOne("CurrentAccount")
-                        .HasForeignKey("DaviCodes.Entities.AccountInfo", "DisplayNameFK")
+                        .HasForeignKey("DaviCodes.Entities.Account", "DisplayNameFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DaviCodes.Entities.User", "User")
                         .WithMany("Accounts")
-                        .HasForeignKey("UserFK");
+                        .HasForeignKey("UserFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CurrentDisplayName");
 
@@ -150,7 +159,9 @@ namespace DaviCodes.Migrations
                 {
                     b.HasOne("DaviCodes.Entities.User", "User")
                         .WithMany("KnownHWIDs")
-                        .HasForeignKey("UserFK");
+                        .HasForeignKey("UserFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -159,16 +170,18 @@ namespace DaviCodes.Migrations
                 {
                     b.HasOne("DaviCodes.Entities.User", "User")
                         .WithMany("KnownIPs")
-                        .HasForeignKey("UserFK");
+                        .HasForeignKey("UserFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("DaviCodes.Entities.UsedDisplayName", b =>
                 {
-                    b.HasOne("DaviCodes.Entities.AccountInfo", "AccountInfo")
+                    b.HasOne("DaviCodes.Entities.Account", "Account")
                         .WithMany("DisplayNameHistory")
-                        .HasForeignKey("AccountInfoFK")
+                        .HasForeignKey("AccountFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -178,12 +191,12 @@ namespace DaviCodes.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AccountInfo");
+                    b.Navigation("Account");
 
                     b.Navigation("DisplayName");
                 });
 
-            modelBuilder.Entity("DaviCodes.Entities.AccountInfo", b =>
+            modelBuilder.Entity("DaviCodes.Entities.Account", b =>
                 {
                     b.Navigation("DisplayNameHistory");
                 });
