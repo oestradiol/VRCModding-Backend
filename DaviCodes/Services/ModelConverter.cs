@@ -1,5 +1,6 @@
 using DaviCodes.Api.User;
 using DaviCodes.Entities;
+using Newtonsoft.Json;
 
 namespace DaviCodes.Services;
 
@@ -12,4 +13,8 @@ public class ModelConverter {
 			LastLogin = user.LastLogin,
 			CreationDateUtc = user.CreationDateUtc
 		};
+
+	public object? ToModel(object? @object) =>
+		JsonConvert.DeserializeObject(JsonConvert.SerializeObject(@object,
+			new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore}));
 }
