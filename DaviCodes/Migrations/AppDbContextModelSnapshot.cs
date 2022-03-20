@@ -26,7 +26,6 @@ namespace DaviCodes.Migrations
                         .HasColumnType("varchar(40)");
 
                     b.Property<string>("DisplayNameFK")
-                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("LastLogin")
@@ -138,9 +137,7 @@ namespace DaviCodes.Migrations
                 {
                     b.HasOne("DaviCodes.Entities.DisplayName", "CurrentDisplayName")
                         .WithOne("CurrentAccount")
-                        .HasForeignKey("DaviCodes.Entities.Account", "DisplayNameFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DaviCodes.Entities.Account", "DisplayNameFK");
 
                     b.HasOne("DaviCodes.Entities.User", "User")
                         .WithMany("Accounts")

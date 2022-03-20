@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DaviCodes.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220319065014_Initial")]
+    [Migration("20220319184110_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,7 +28,6 @@ namespace DaviCodes.Migrations
                         .HasColumnType("varchar(40)");
 
                     b.Property<string>("DisplayNameFK")
-                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("LastLogin")
@@ -140,9 +139,7 @@ namespace DaviCodes.Migrations
                 {
                     b.HasOne("DaviCodes.Entities.DisplayName", "CurrentDisplayName")
                         .WithOne("CurrentAccount")
-                        .HasForeignKey("DaviCodes.Entities.Account", "DisplayNameFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DaviCodes.Entities.Account", "DisplayNameFK");
 
                     b.HasOne("DaviCodes.Entities.User", "User")
                         .WithMany("Accounts")
