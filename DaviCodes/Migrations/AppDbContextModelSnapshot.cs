@@ -140,7 +140,7 @@ namespace DaviCodes.Migrations
                         .HasForeignKey("DaviCodes.Entities.Account", "DisplayNameFK");
 
                     b.HasOne("DaviCodes.Entities.User", "User")
-                        .WithMany("Accounts")
+                        .WithMany("KnownAccounts")
                         .HasForeignKey("UserFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -205,7 +205,7 @@ namespace DaviCodes.Migrations
 
             modelBuilder.Entity("DaviCodes.Entities.User", b =>
                 {
-                    b.Navigation("Accounts");
+                    b.Navigation("KnownAccounts");
 
                     b.Navigation("KnownHWIDs");
 
