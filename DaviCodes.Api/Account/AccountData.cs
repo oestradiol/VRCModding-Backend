@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DaviCodes.Api.AccountInfo;
+namespace DaviCodes.Api.Account;
 
-public class AccountInfoData
+public class AccountData
 {
     [Required(ErrorMessage = "The User's ID is required.")]
     public string Id { get; set; }

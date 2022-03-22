@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using DaviCodes.Api.DisplayName;
 
-namespace DaviCodes.Api.AccountInfo;
+namespace DaviCodes.Api.Account;
 
-public class AccountInfoModel
+public class AccountModel
 {
     [Required]
     [MaxLength(40)]
